@@ -7,6 +7,7 @@ import com.sda.pizzeria.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -21,6 +22,9 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
@@ -37,18 +41,18 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
     private void addUser(String username, String password, String... roles) {
         Set<UserRole> userRoles = new HashSet<>();
-        for (String role: roles) {
+        for (String role : roles) {
             Optional<UserRole> singleRole = userRoleRepository.findByName(role);
-            if(singleRole.isPresent()){
+            if (singleRole.isPresent()) {
                 userRoles.add(singleRole.get());
             }
         }
         // wszystkie role zebrane w secie.
         Optional<AppUser> searchedAppUser = appUserRepository.findByUsername(username);
-        if(!searchedAppUser.isPresent()) {
+        if (!searchedAppUser.isPresent()) {
             AppUser appUser = AppUser.builder()
                     .username(username)
-                    .password(password)
+                    .password(passwordEncoder.encode(password))
                     .roles(userRoles).build();
 
             appUserRepository.save(appUser);
