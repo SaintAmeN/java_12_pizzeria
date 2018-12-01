@@ -2,9 +2,12 @@ package com.sda.pizzeria.component;
 
 import com.sda.pizzeria.model.AppUser;
 import com.sda.pizzeria.model.UserRole;
+import com.sda.pizzeria.model.dto.AddIngredientRequest;
 import com.sda.pizzeria.repository.AppUserRepository;
 import com.sda.pizzeria.repository.UserRoleRepository;
+import com.sda.pizzeria.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,11 +20,17 @@ import java.util.Set;
 @Component
 public class DataInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
+    @Value("${pizzeria.ingredients.default}")
+    private String[] ingredients;
+
     @Autowired
     private AppUserRepository appUserRepository;
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private PizzaService pizzaService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -32,6 +41,17 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         // stworzenie podstawowych uprawnień
         createInitialRoles();
         createInitialUsers();
+        addDefaultIngredients();
+    }
+
+    private void addDefaultIngredients() {
+        for (String ingredient : ingredients) {
+            addIngredient(ingredient);
+        }
+    }
+
+    private void addIngredient(String ingredient) {
+        pizzaService.addIngredient(new AddIngredientRequest(ingredient));
     }
 
     private void createInitialUsers() {

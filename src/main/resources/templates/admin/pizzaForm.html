@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:include="template :: scripts_css"/>
+    <title>Pizzeria SDA! - Pizza Form</title>
+</head>
+<body>
+
+<th:block th:include="template :: navigator"/>
+
+<h2>Pizza form:</h2>
+<div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <form th:href="@{/admin/pizzaForm}" method="post" th:object="${formObject}">
+            <div class="form-group">
+                <label for="pizzaName">Pizza Name:</label>
+                <input type="text" class="form-control" name="pizzaName" id="pizzaName" th:field="*{name}" placeholder="Pizza name">
+            </div>
+            <div class="form-check">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<th:block th:include="template :: scripts_js"/>
+</body>
+</html>

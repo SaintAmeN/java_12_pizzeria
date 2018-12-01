@@ -11,9 +11,4 @@ public class IndexController {
     public String getIndex(){
         return "index"; // index.html w templates
     }
-
-    @GetMapping("/pizzas")
-    public String getPizzas(){
-        return "pizzas"; // index.html w templates
-    }
 }
