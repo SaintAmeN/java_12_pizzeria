@@ -8,7 +8,26 @@
 </head>
 <body>
 <th:block th:include="template :: navigator"/>
+<th:block th:include="template :: messageBox"/>
 <h2>Register Form!</h2>
+<div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <form th:href="@{/register}" method="post" th:object="${formObject}">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username" id="username" th:field="*{username}" aria-describedby="usernameHelp"
+                       placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" id="password"  th:field="*{password}"placeholder="Password">
+            </div>
+            <div class="form-check">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <th:block th:include="template :: scripts_js"/>
 </body>

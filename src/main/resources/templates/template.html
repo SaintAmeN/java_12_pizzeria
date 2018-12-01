@@ -24,4 +24,10 @@
         </div>
     </nav>
 </th:block>
+
+<th:block th:fragment="messageBox">
+    <div class="message" th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+</th:block>
 </html>
