@@ -1,6 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
 <th:block th:fragment="scripts_css">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -12,22 +12,25 @@
     <script th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
 </th:block>
 
+<th:block th:fragment="messageBox">
+    <div class="message" th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+</th:block>
+
 <th:block th:fragment="navigator">
     <nav class="site-header sticky-top py-1">
         <div class="container d-flex flex-column flex-md-row justify-content-between">
             <a class="py-2 d-none d-md-inline-block" th:href="@{/}">Home</a>
             <a class="py-2 d-none d-md-inline-block" th:href="@{/pizzas}">Pizzas</a>
-            <a class="py-2 d-none d-md-inline-block" th:href="@{/user/profile}">Profile</a>
-            <a class="py-2 d-none d-md-inline-block" th:href="@{/login}">Login</a>
-            <a class="py-2 d-none d-md-inline-block" th:href="@{/register}">Register</a>
-            <a class="py-2 d-none d-md-inline-block" th:href="@{/logout}">Logout</a>
+            <a sec:authorize="isAuthenticated()" class="py-2 d-none d-md-inline-block" th:href="@{/user/profile}">Profile</a>
+            <a sec:authorize="isAuthenticated() && hasRole('ADMIN')" class="py-2 d-none d-md-inline-block"
+               th:href="@{/admin}">Admin Panel</a>
+            <a sec:authorize="!isAuthenticated()" class="py-2 d-none d-md-inline-block" th:href="@{/login}">Login</a>
+            <a sec:authorize="!isAuthenticated()" class="py-2 d-none d-md-inline-block"
+               th:href="@{/register}">Register</a>
+            <a sec:authorize="isAuthenticated()" class="py-2 d-none d-md-inline-block" th:href="@{/logout}">Logout</a>
         </div>
     </nav>
-</th:block>
-
-<th:block th:fragment="messageBox">
-    <div class="message" th:if="${message}">
-        <p th:text="${message}"></p>
-    </div>
 </th:block>
 </html>
