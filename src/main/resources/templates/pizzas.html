@@ -9,18 +9,31 @@
 </head>
 <body>
 <th:block th:include="template :: navigator"/>
+<th:block th:include="template :: messageBox"/>
 <h2>Here are some pizzas:</h2>
 
 <div class="container">
-    <div class="row" th:each="pizza,i : ${pizzas}">
-        <div class="col-2" th:text="${pizza.id}"></div>
-        <div class="col-2" th:text="${pizza.name}"></div>
-        <div class="col-2" th:text="${pizza.price}"></div>
-        <div class="col-6">
-            <div th:each="ingredient: ${pizzas[__${i.index}__].getProducts()}">
-                <p th:text="${ingredient.getName()}"></p>
-            </div>
+    <div sec:authorize="isAuthenticated() && hasRole('ADMIN')" class="row">
+        <div class="offset-10 col-2">
+            <a th:href="@{/admin/pizzaForm}">Add New Pizza</a>
         </div>
+    </div>
+    <div class="row header">
+        <div class="col-1">Id.</div>
+        <div class="col-3">Name</div>
+        <div class="col-2">Price</div>
+        <div class="col-4">Ingredients</div>
+        <div th:if="${loggedIn}" class="col-2">Actions</div>
+    </div>
+    <div class="row table-row" th:each="pizza,i : ${pizzas}">
+        <div class="col-1" th:text="${pizza.id}"></div>
+        <div class="col-3" th:text="${pizza.name}"></div>
+        <div class="col-2" th:text="${pizza.price}"></div>
+        <div class="col-4 ">
+            <span th:each="ingredient, iterStat: ${pizzas[__${i.index}__].getProducts()}"
+                  th:text="!${iterStat.last} ? ${ingredient.name} + ', ': ${ingredient.name}"></span>
+        </div>
+        <div th:if="${loggedIn}" class="col-2"></div>
     </div>
 </div>
 

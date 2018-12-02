@@ -56,7 +56,7 @@ public class PizzaService {
 
     public Optional<Pizza> updateIngredients(IngredientsRequest request) {
         Optional<Pizza> pizzaOptional = pizzaRepository.findById(request.getPizzaId());
-            if (!pizzaOptional.isPresent()) {
+        if (!pizzaOptional.isPresent()) {
             return Optional.empty();
         }
         Pizza pizza = pizzaOptional.get();
@@ -74,5 +74,9 @@ public class PizzaService {
 
     private Set<Ingredient> findAllIngredients(Set<String> ingredientNames) {
         return new HashSet<>(ingredientRepository.findAllByNameIn(ingredientNames));
+    }
+
+    public Optional<Pizza> getPizzaWithId(Long pizzaId) {
+        return pizzaRepository.findById(pizzaId);
     }
 }

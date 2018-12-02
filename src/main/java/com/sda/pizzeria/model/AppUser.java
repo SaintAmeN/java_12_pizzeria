@@ -21,4 +21,7 @@ public class AppUser {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<UserRole> roles;
+
+    @OneToOne()
+    private UserCart userCart;
 }

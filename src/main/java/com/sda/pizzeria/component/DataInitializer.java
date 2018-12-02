@@ -1,9 +1,11 @@
 package com.sda.pizzeria.component;
 
 import com.sda.pizzeria.model.AppUser;
+import com.sda.pizzeria.model.UserCart;
 import com.sda.pizzeria.model.UserRole;
 import com.sda.pizzeria.model.dto.AddIngredientRequest;
 import com.sda.pizzeria.repository.AppUserRepository;
+import com.sda.pizzeria.repository.UserCartRepository;
 import com.sda.pizzeria.repository.UserRoleRepository;
 import com.sda.pizzeria.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserCartRepository userCartRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
@@ -70,9 +75,13 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         // wszystkie role zebrane w secie.
         Optional<AppUser> searchedAppUser = appUserRepository.findByUsername(username);
         if (!searchedAppUser.isPresent()) {
+            UserCart cart = new UserCart();
+            cart = userCartRepository.save(cart);
+
             AppUser appUser = AppUser.builder()
                     .username(username)
                     .password(passwordEncoder.encode(password))
+                    .userCart(cart)
                     .roles(userRoles).build();
 
             appUserRepository.save(appUser);
