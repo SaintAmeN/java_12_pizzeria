@@ -1,6 +1,8 @@
 package com.sda.pizzeria.controller;
 
 import com.sda.pizzeria.model.Pizza;
+import com.sda.pizzeria.model.dto.IngredientRequest;
+import com.sda.pizzeria.model.dto.IngredientsRequest;
 import com.sda.pizzeria.model.dto.request.AddPizzaRequest;
 import com.sda.pizzeria.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path = "/admin/")
@@ -43,7 +46,21 @@ public class AdminController {
 
     @GetMapping(path = "/ingredients/{id}")
     public String getIngredientsForm(Model model, @PathVariable(name = "id") Long id) {
+        IngredientsRequest request = new IngredientsRequest();
+        request.setPizzaId(id);
+        request.setIngredients(pizzaService.getAllIngredients()
+                .stream()
+                .map(ingredient -> new IngredientRequest(ingredient.getName(), false))
+                .collect(Collectors.toList()));
+
+        model.addAttribute("formObject", request);
 
         return "admin/ingredientsForm";
+    }
+
+    @PostMapping(path = "/ingredients/{id}")
+    public String sendIngredients(Model model, IngredientsRequest request) {
+        Optional<Pizza> pizza = pizzaService.updateIngredients(request);
+        return "redirect:/pizzas";
     }
 }

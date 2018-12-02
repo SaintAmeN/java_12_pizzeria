@@ -1,11 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <th:block th:include="template :: scripts_css"/>
+    <title>Pizzeria SDA! - Pizza Ingredients Form</title>
 </head>
 <body>
 
-<h2>Yo!</h2>
+<th:block th:include="template :: navigator"/>
+
+<h2>Ingredients form:</h2>
+<div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <form th:href="@{'/admin/ingredients/' + ${formObject.pizzaId}}" method="post" th:object="${formObject}">
+            <input type="hidden" th:field="*{pizzaId}" th:value="*{pizzaId}">
+
+            <div class="form-group" th:each="ingredient,index : *{ingredients}">
+                <label for="ingredient" th:text="${ingredient.name}">:</label>
+                <input type="hidden" th:field="${formObject.ingredients[__${index.index}__].name}"
+                       th:value="${formObject.ingredients[__${index.index}__].name}">
+                <input type="checkbox" class="form-control" name="ingredient" id="ingredient"
+                       th:field="${formObject.ingredients[__${index.index}__].added}" placeholder="Pizza name">
+            </div>
+
+            <div class="form-check">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<th:block th:include="template :: scripts_js"/>
 </body>
 </html>

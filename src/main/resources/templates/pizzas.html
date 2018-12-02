@@ -9,7 +9,20 @@
 </head>
 <body>
 <th:block th:include="template :: navigator"/>
-<h2>Hello my pizzas!</h2>
+<h2>Here are some pizzas:</h2>
+
+<div class="container">
+    <div class="row" th:each="pizza,i : ${pizzas}">
+        <div class="col-2" th:text="${pizza.id}"></div>
+        <div class="col-2" th:text="${pizza.name}"></div>
+        <div class="col-2" th:text="${pizza.price}"></div>
+        <div class="col-6">
+            <div th:each="ingredient: ${pizzas[__${i.index}__].getProducts()}">
+                <p th:text="${ingredient.getName()}"></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <th:block th:include="template :: scripts_js"/>
 </body>
