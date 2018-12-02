@@ -3,6 +3,7 @@ package com.sda.pizzeria.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/register",
                         "/login",
                         "/pizzas").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
+//                .filterSecurityInterceptorOncePerRequest()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**", "/order/**").hasRole("USER")
                 .and().formLogin().loginPage("/login")
