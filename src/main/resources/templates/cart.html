@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:include="template :: scripts_css"/>
+
+    <title>Pizzeria SDA! - Cart</title>
+</head>
+<body>
+<th:block th:include="template :: navigator"/>
+<h2>Cart!</h2>
+<div class="container">
+    <form th:action="@{/user/updateCart}" method="post" th:object="${cart}">
+        <div class="row header">
+            <div class="col-3">Pizza Name</div>
+            <div class="col-1">Price</div>
+            <div class="col-2">Quantity</div>
+            <div class="col-2">Total</div>
+            <div class="offset-1 col-3">Actions</div>
+        </div>
+        <div class="row table-row" th:each="order,i : *{orders}">
+            <div class="col-3" th:text="${order.pizza.name}"></div>
+            <div class="col-1" th:text="${order.pizza.price}"></div>
+            <div class="col-2">
+                <input class="w-100" type="hidden" th:field="${cart.orders[__${i.index}__].id}"/>
+                <input class="w-100" type="hidden" th:field="${cart.orders[__${i.index}__].pizza}"/>
+                <input class="w-100" type="number" th:field="${cart.orders[__${i.index}__].quantity}"/>
+            </div>
+            <div class="col-2" th:text="${order.pizza.price * order.quantity}"></div>
+            <div class="offset-1 col-3">
+                <div class="col-6"><a th:href="@{'/user/removeFromCart/' + ${order.id}}">Remove</a></div>
+            </div>
+        </div>
+        <div class="row header">
+            <div class="col-3"></div>
+            <div class="col-1"></div>
+            <div class="col-2"></div>
+            <div class="col-2" th:text="${#aggregates.sum(cart.orders.![pizza.price * quantity])}"></div>
+            <div class="offset-1 col-3"><input class="w-100" type="submit" value="Update"></div>
+        </div>
+
+    </form>
+</div>
+
+<th:block th:include="template :: scripts_js"/>
+</body>
+</html>

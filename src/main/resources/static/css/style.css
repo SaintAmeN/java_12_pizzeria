@@ -91,7 +91,7 @@
 }
 
 .table-row:nth-child(even):hover {
-    background-color: #ef0000;
+    background-color: #ef8888;
     color:#ffffff;
 }
 .header{

@@ -85,4 +85,47 @@ public class AppUserService {
 
         return Optional.of(cart);
     }
+
+    public Optional<UserCart> updateCart(UserCart userCart) {
+        Optional<AppUser> loggedInUser = appUserAuthenticationService.getLoggedInUser();
+        if (!loggedInUser.isPresent()) {
+            return Optional.empty();
+        }
+        UserCart originalCart = loggedInUser.get().getUserCart();
+
+        for (int i = 0; i < originalCart.getOrders().size(); i++) {
+            for (int j = 0; j < userCart.getOrders().size(); j++) {
+                if(originalCart.getOrders().get(i).getId() ==
+                        userCart.getOrders().get(j).getId()){
+                    originalCart.getOrders().get(i).setQuantity(userCart.getOrders().get(j).getQuantity());
+                    break;
+                }
+            }
+        }
+
+        originalCart = userCartRepository.save(originalCart);
+
+        return Optional.of(originalCart);
+    }
+
+    public Optional<UserCart> removeFromCart(Long orderId) {
+        Optional<AppUser> loggedInUser = appUserAuthenticationService.getLoggedInUser();
+        if (!loggedInUser.isPresent()) {
+            return Optional.empty();
+        }
+        UserCart originalCart = loggedInUser.get().getUserCart();
+        for (int i = 0; i < originalCart.getOrders().size(); i++) {
+            if(originalCart.getOrders().get(i).getId() == orderId){
+                CartOrder order = originalCart.getOrders().get(i);
+                originalCart.getOrders().remove(order);
+
+                cartOrderRepository.delete(order);
+
+                break;
+            }
+        }
+        originalCart = userCartRepository.save(originalCart);
+
+        return Optional.of(originalCart);
+    }
 }

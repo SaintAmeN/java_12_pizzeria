@@ -27,6 +27,7 @@
             <a sec:authorize="isAuthenticated() && hasRole('ADMIN')" class="py-2 d-none d-md-inline-block"
                th:href="@{/admin}">Admin Panel</a>
             <a sec:authorize="!isAuthenticated()" class="py-2 d-none d-md-inline-block" th:href="@{/login}">Login</a>
+            <a sec:authorize="isAuthenticated()" class="py-2 d-none d-md-inline-block" th:href="@{/user/cart}">Cart</a>
             <a sec:authorize="!isAuthenticated()" class="py-2 d-none d-md-inline-block"
                th:href="@{/register}">Register</a>
             <a sec:authorize="isAuthenticated()" class="py-2 d-none d-md-inline-block" th:href="@{/logout}">Logout</a>
